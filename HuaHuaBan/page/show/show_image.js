@@ -12,7 +12,7 @@ Page({
   data:{
     imageUrl:'',
     disabled: true,
-    second:1 //下一张按钮在10s后才能生效
+    second:10 //下一张按钮在10s后才能生效
 
   },
   /**
@@ -34,6 +34,7 @@ Page({
    */
   onShow() {
     this.initImages();
+    this.countdown(this);
     //等待10s
   },
 
@@ -70,8 +71,7 @@ Page({
     })
   },
 
-  countdown:function()  {
-    var that = this;
+  countdown:function(that)  {
     var second = that.data.second
     if (second == 0) {
       console.log(second);
@@ -80,12 +80,12 @@ Page({
       });
       return;
     }
+    console.log(second);
     var time = setTimeout(function () {
-      console.log(second)
       that.setData({
         second: second - 1
       });
-      countdown();
+      that.countdown(that);
     }
       , 1000)
   },
