@@ -5,7 +5,7 @@
 <!-- <view class="setting_view_item" catchtap='goBack'>
 <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>-->
 <button type="default" size="{{defaultSize}}" loading="{{loading}}" plain="{{plain}}"
-        disabled="{{disabled}}"
+        disabled="{{disabled}}" 
         hover-class="other-button-hover" bindtap="goBack" class="margin-button"> draw </button>
 
 </view>

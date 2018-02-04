@@ -56,14 +56,18 @@ Page({
           response: res
         })
         try {
+          wx.setStorageSync('drawerid', that.data.userName)
           wx.setStorageSync('id_token', res.data.id_token)//同步存储
-          wx.setStorageSync('pic_url',res.data.resource_array)
+          wx.setStorageSync('pic_url', res.data.resource_array)
+          wx.setStorageSync('un_count', res.data.unfinished_count)
+          wx.setStorageSync('method', 1)
         } catch (e) {
+          console.log(e)
         }
 
-        console.log(res.data);
+        console.log(wx.getStorageSync('pic_url'));
         wx.navigateTo({
-          url: '../index/index'
+          url: '../show/show_image'
         })
       },
       fail: function (res) {

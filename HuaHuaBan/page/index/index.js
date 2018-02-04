@@ -201,23 +201,34 @@ Page({
   },
 
   checkImage: function (){
+    wx.setStorageSync('method', 0)
     wx.redirectTo({ 
       url: '../show/show_image',
     })
   },
   downLoadImage:function(){ 
-    var that = this;
+    var rest_url = wx.getStorageSync('pic_url')
+    rest_url.pop()
+    wx.setStorageSync('pic_url', rest_url)
+    wx.setStorageSync('un_count', wx.getStorageSync('un_count') - 1)
+    wx.setStorageSync('method', 1)
+    wx.navigateTo({
+      url: '../show/show_image',
+    })
+    console.log(rest_url.pop())
+    //接受一个新的图片url 并显示
+    
     //上传点坐标信息
     wx.request({
-      url: 'https://78413126.draw3dsketch.com/finish',
+      url: 'https://78413126.draw3dsketch.com/finish111',
       method: 'post',
       data: {
         //这里是发送给服务器的参数（参数名：参数值）
 
-        "drawerid": "testid", 
+        "drawerid": wx.getStorageSync('drawerid'), 
         "data_x": datax,
         "data_y": datay,
-        "filename": "1161.png",
+        "filename": wx.getStorageSync('filename'),
         "displayx":1080,
         "displayy":1920
 
@@ -227,18 +238,22 @@ Page({
       },
       success: function (res) {
         console.log(res.data)
+        if(res.data.result == 1) {
+          var rest_url = wx.getStorageSync('pic_url')
+          rest.pop()
+          wx.setStorageSync('pic_url', rest_url)
+          wx.setStorageSync('un_count', wx.getStorageSync('un_count') - 1)
+          wx.setStorageSync('method', 1)
+          //delete datax,datay
+          datax = []
+          datay = []
+          wx.navigateTo({
+            url: '../show/show_image',
+          })
+        }
       }
     });
-    //delete datax,datay
-    datax = [],
-    datay = [],
-      
-    //接受一个新的图片url 并显示
-    wx.redirectTo({
-      url: '../show/show_image',
-    })
-
- }, 
+ },
  
  
 })
