@@ -1,8 +1,21 @@
-<view class="container">  
-  <view class="usermotto">  
-    <text class="user-motto">{{motto}}</text>  
-    用户名：  
-    <input type="text" bindinput="userNameInput"/> <!--binduserNameInput-->
-    <button bindtap="logIn">登录</button>  
-  </view>  
-</view>  
+<view class="container"> 
+ <view class="login-icon"> 
+ <image class="login-img" src="../../resources/icon/background.jpg"></image> 
+ </view> 
+ <view class="login-from"> 
+  
+ <!--账号-->
+ <view class="inputView"> 
+  <image class="nameImage" src="../../resources/icon/name.png"></image> 
+  <label class="loginLab">账号</label> 
+  <input class="inputText" placeholder="请输入账号" bindinput="userNameInput" /> 
+ </view> 
+ <view class="line"></view> 
+  
+ <!--按钮-->
+ <view class="loginBtnView"> 
+  <button class="loginBtn" type="primary" size="{{primarySize}}" loading="{{loading}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="logIn">登录</button> 
+ </view> 
+ </view> 
+</view>
+ 
