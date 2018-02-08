@@ -28,7 +28,6 @@ public class LoginServlet extends HttpServlet {
 	private static final int ID_SUCCESS = 1;
 	private static final String KEY_RESULT = "result";
 	private static final String KEY_UNFINISHED_COUNT = "unfinished_count";
-	private static final String KEY_RESOURCE_DIR = "resource_dir";
 	private static final String KEY_RESOURCE_ARRAY = "resource_array";
 	
 	private static final String FILE_HOST = "https://model-1256072725.cos.ap-beijing.myqcloud.com/";
@@ -59,37 +58,32 @@ public class LoginServlet extends HttpServlet {
 			List<Object> queryResult = db.query("select dirname from usertask where userid=?",
 					new Object[] { drawerid });
 			if (queryResult.size() > 0) {
-				Map dirmap = (Map) queryResult.get(0);
-				String dirname = (String) dirmap.get("dirname");
-				List<Object> checkResult = db.query("select filename from fileinfo where dirname=? and isfinished=0",
-						new Object[] { dirname });
+				db.createTable(drawerid, queryResult);
+				List<Object> checkResult = db.query("select filename, dirname from " + drawerid + " where isfinished = 0", null);
 				if (checkResult.size() > 0) {
 					json.put(KEY_RESULT, ID_SUCCESS);
 					json.put(KEY_UNFINISHED_COUNT, checkResult.size());
-					json.put(KEY_RESOURCE_DIR, dirname);
 					JSONArray array = new JSONArray();
 					for (Object file : checkResult) {
 						Map filemap = (Map) file;
 						String filename = (String) filemap.get("filename");
+						String dirname = (String) filemap.get("dirname");
 						array.add(FILE_HOST + dirname + "/" + filename);
 					}
 					json.put(KEY_RESOURCE_ARRAY, array.toString());
 				} else {
 					json.put(KEY_RESULT, ID_FINISH);
 					json.put(KEY_UNFINISHED_COUNT, 0);
-					json.put(KEY_RESOURCE_DIR, dirname);
 					json.put(KEY_RESOURCE_ARRAY, "");
 				}
 			} else {
 				json.put(KEY_RESULT, ID_ERROR);
 				json.put(KEY_UNFINISHED_COUNT, 0);
-				json.put(KEY_RESOURCE_DIR, "");
 				json.put(KEY_RESOURCE_ARRAY, "");
 			}
 		} else {
 			json.put(KEY_RESULT, ID_NULL);
 			json.put(KEY_UNFINISHED_COUNT, 0);
-			json.put(KEY_RESOURCE_DIR, "");
 			json.put(KEY_RESOURCE_ARRAY, "");
 		}
 		out.write(json.toString());

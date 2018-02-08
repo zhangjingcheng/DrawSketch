@@ -57,6 +57,7 @@ public class FinishServlet extends HttpServlet {
 		double scaley = 1920 / (Integer) param.get("displayy");
 		JSONArray data_x = param.getJSONArray("data_x");
 		JSONArray data_y = param.getJSONArray("data_y");
+		JSONArray data_t = param.getJSONArray("diff_time");
 		response.setContentType("text/html;charset=utf-8");
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET,POST");
@@ -67,23 +68,28 @@ public class FinishServlet extends HttpServlet {
 		} else {
 			List<List<Double>> datax = new ArrayList<List<Double>>();
 			List<List<Double>> datay = new ArrayList<List<Double>>();
+			List<List<Integer>> datat = new ArrayList<List<Integer>>();
 			if (data_x.size() == data_y.size()) {
 				for (int i = 0; i < data_x.size(); i++) {
 					JSONArray line_x = data_x.getJSONArray(i);
 					JSONArray line_y = data_y.getJSONArray(i);
+					JSONArray line_t = data_t.getJSONArray(i);
 					List<Double> linex = new ArrayList<Double>();
 					List<Double> liney = new ArrayList<Double>();
+					List<Integer> linet = new ArrayList<Integer>();
 					for (int j = 0; j < line_x.size(); j++) {
 						linex.add(line_x.getDouble(j) * scalex);
 						liney.add(line_y.getDouble(j) * scaley);
+						linet.add(line_t.getInt(j));
 					}
 					datax.add(linex);
 					datay.add(liney);
+					datat.add(linet);
 				}
-				//SvgGenerator.outputLines(datax, datay, "D:/" + filename.replace("png", "svg"));
-				if (SvgGenerator.outputLines(datax, datay,
-						this.getServletContext().getRealPath("/") + filename.replace("png", "svg")) == SvgGenerator.RESULT_OK) {
-					if (db.update("update fileinfo set isfinished = 1 where filename = ?",
+				//SvgGenerator.outputLines(datax, datay, datat, this.getServletContext().getRealPath("/") "D:/" + filename.replace("png", "svg"));
+				if (SvgGenerator.outputLines(datax, datay, datat,
+						this.getServletContext().getRealPath("/") + drawerid + "-" + filename.replace("png", "svg")) == SvgGenerator.RESULT_OK) {
+					if (db.update("update " + drawerid + " set isfinished = 1 where filename = ?",
 							new String[] { filename }) > 0) {
 						json.put(KEY_RESULT, RESULT_SUCCESS);
 					}

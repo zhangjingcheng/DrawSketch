@@ -1,6 +1,7 @@
 package utils;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ public class DBUtils {
 	//private static final String URL = "jdbc:mysql://localhost:3306/draw3dsketch";
 	private static final String URL = "jdbc:mysql://172.17.0.7:3306/draw3dsketch";
 	private static final String USER = "root";
+	//private static final String PASSWORD = "101235zh";
 	private static final String PASSWORD = "qianran1024";
 
 	private Connection conn = null;
@@ -49,7 +51,49 @@ public class DBUtils {
 		}
 		return conn;
 	}
-
+	
+	/**
+	 * 新建一张表
+	 * 
+	 * @return
+	 */
+	public void createTable(String drawerid, List<Object> dirnames) {
+		conn = this.getConn();
+		try {
+			DatabaseMetaData meta = conn.getMetaData();
+			ResultSet result = meta.getTables(null, null, drawerid, null);
+			if (result.next()) {
+				System.out.println("table exist");
+				return;
+			} else {
+				System.out.println("table doesn't exist");
+				st = conn.createStatement();
+				String createSql = "create table " + drawerid +
+						" (id INTEGER NOT NULL AUTO_INCREMENT, " + 
+						"filename VARCHAR(255), " +
+						"dirname VARCHAR(255), " +
+						"isfinished TINYINT DEFAULT 0, " + 
+						"PRIMARY KEY ( id ))";
+				st.executeUpdate(createSql);
+				String insertSql = "insert into " + drawerid +
+						" (filename, dirname) select filename, dirname from fileinfo where dirname = ";
+				for (int i = 0; i < dirnames.size(); i++) {
+					Map dirname = (Map) dirnames.get(i);
+					insertSql = insertSql + "'" + dirname.get("dirname") + "'";
+					if (i != dirnames.size() - 1) {
+						insertSql = insertSql + " or dirname = ";
+					}
+				}
+				st.executeUpdate(insertSql);
+				System.out.println("table create successful!");
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("新建失败：" + e.getMessage());
+		} finally {
+			closeConn();
+		}
+	}
 	/**
 	 * 获取结果集（无参）
 	 * 

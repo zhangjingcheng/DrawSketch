@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
@@ -23,7 +24,8 @@ public class SvgGenerator {
 	public static final int RESULT_EXCEPTION = -1;
 	public static final int RESULT_ERROR = -2;
 
-	public static int outputLines(List<List<Double>> datax, List<List<Double>> datay, String outputPath) {
+	public static int outputLines(List<List<Double>> datax, List<List<Double>> datay, List<List<Integer>> datat,
+			String outputPath) {
 		if (datax.size() != datay.size()) {
 			return RESULT_ERROR;
 		}
@@ -35,29 +37,53 @@ public class SvgGenerator {
 		Element svgRoot = document.getDocumentElement();
 		svgRoot.setAttributeNS(null, "width", "1080");
 		svgRoot.setAttributeNS(null, "height", "1920");
+		File times = new File(outputPath.replace("svg", "txt"));
+		Writer writer = null;
+		try {
+			if (!times.exists()) {
+				times.createNewFile();
+			}
+			writer = new OutputStreamWriter(new FileOutputStream(times), "UTF-8");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for (int i = 0; i < datax.size(); i++) {
 			List<Double> linex = datax.get(i);
 			List<Double> liney = datay.get(i);
+			List<Integer> linet = datat.get(i);
 			if (linex.size() == liney.size() && linex.size() > 1) {
 				Element path = document.createElementNS(svgNS, "path");
 				path.setAttributeNS(null, "d", pathGenerator(linex, liney));
 				path.setAttributeNS(null, "style", "fill:white;stroke:black;stroke-width:2.5");
 				svgRoot.appendChild(path);
+				try {
+					for (int time : linet) {
+						writer.write(String.valueOf(time));
+						writer.write(" ");
+					}
+					writer.write("\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				return RESULT_ERROR;
 			}
 		}
 		try {
-			TransformerFactory transFactory = TransformerFactory.newInstance();  
-	        Transformer transFormer = transFactory.newTransformer();  
-	        transFormer.setOutputProperty(OutputKeys.ENCODING, "GB2312");  
-	        DOMSource domSource = new DOMSource(document);  
-	        File file = new File(outputPath);
-	        file.createNewFile();
+			TransformerFactory transFactory = TransformerFactory.newInstance();
+			Transformer transFormer = transFactory.newTransformer();
+			transFormer.setOutputProperty(OutputKeys.ENCODING, "GB2312");
+			DOMSource domSource = new DOMSource(document);
+			File file = new File(outputPath);
+			file.createNewFile();
 			Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 			StreamResult result = new StreamResult(out);
-			transFormer.transform(domSource, result);  
-		}catch(Exception e) {
+			transFormer.transform(domSource, result);
+			out.close();
+			writer.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 			return RESULT_EXCEPTION;
 		}
@@ -79,7 +105,7 @@ public class SvgGenerator {
 			double y1 = liney.get(i - 1);
 			double x2 = linex.get(i);
 			double y2 = liney.get(i);
-			sb.append( "C" + String.valueOf(x1) + " " + String.valueOf(y1) + " " + String.valueOf(x2) + " "
+			sb.append("C" + String.valueOf(x1) + " " + String.valueOf(y1) + " " + String.valueOf(x2) + " "
 					+ String.valueOf(y2) + " " + String.valueOf(x2) + " " + String.valueOf(y2) + " ");
 		}
 		return sb.toString();
