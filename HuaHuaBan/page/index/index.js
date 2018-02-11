@@ -228,7 +228,7 @@ Page({
     
     //上传点坐标信息
     wx.request({
-      url: 'https://78413126.draw3dsketch.com/finish',
+      url: 'https://wxapi.hotapp.cn/proxy/?appkey=hotapp403228604&url=https://78413126.draw3dsketch.com/finish',
       method: 'post',
       data: {
         //这里是发送给服务器的参数（参数名：参数值）
@@ -242,7 +242,8 @@ Page({
        // "resy": wx.getStorageSync('resy'),
         "displayx": wx.getStorageSync('displayx'),
         "displayy": wx.getStorageSync('displayy'),
-
+        "device": wx.getStorageSync('device'),
+        "dpr": wx.getStorageSync('pixelRatio'),
       },
       header: {
         'content-type': 'application/json'  //这里注意POST请求content-type是小写，大写会报错  

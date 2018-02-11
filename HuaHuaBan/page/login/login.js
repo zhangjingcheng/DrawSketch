@@ -5,7 +5,15 @@ Page({
  * 生命周期函数--监听页面加载
  */
   onLoad() {
-
+    wx.getSystemInfo({
+      success: function (res) {
+        wx.setStorageSync('displayx', res.screenWidth)
+        wx.setStorageSync('displayy', res.screenHeight)
+        wx.setStorageSync('device',res.model)
+        wx.setStorageSync('pixelRatio', res.pixelRatio)
+        console.log(res)
+      }
+    })
   },
 
   /**
@@ -45,7 +53,7 @@ Page({
   logIn: function () {
     var that = this
     wx.request({
-      url: 'https://78413126.draw3dsketch.com/login',
+      url: 'https://wxapi.hotapp.cn/proxy/?appkey=hotapp403228604&url=https://78413126.draw3dsketch.com/login',
       data: {
         drawerid: this.data.userName,
       },
@@ -79,14 +87,6 @@ Page({
                   url: '../show/show_image'
                 })
               }
-            }
-          })
-          wx.getSystemInfo({
-            success: function (res) {         
-              wx.setStorageSync('displayx', res.windowHeight),
-              wx.setStorageSync('displayy', res.windowWidth)  
-              console.log(res.windowHeight)
-              console.log(res.windowWidth)          
             }
           });  
          
