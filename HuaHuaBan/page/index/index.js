@@ -5,6 +5,8 @@ const app = getApp();
 var ctx = null;
 var datax = new Array();
 var datay = new Array();
+var linex = new Array();
+var liney = new Array();
 // 创建页面实例对象
 Page({
   /**
@@ -144,10 +146,8 @@ Page({
     }
     ctx.moveTo(that.pointData.begin_x, that.pointData.begin_y);
     ctx.lineTo(that.pointData.begin_x, that.pointData.begin_y);
-    datax.push('M');
-    datax.push(that.pointData.begin_x)
-    datay.push('M');
-    datay.push(that.pointData.begin_y)
+    linex.push(that.pointData.begin_x.toFixed(2));
+    liney.push(that.pointData.begin_y.toFixed(2));
     ctx.stroke();
     ctx.draw(true);
   },
@@ -163,20 +163,21 @@ Page({
     } else {
       ctx.moveTo(that.pointData.begin_x, that.pointData.begin_y);  //把路径移动到画布中的指定点，但不创建线条
       ctx.lineTo(e.touches[0].x, e.touches[0].y);  //添加一个新点，然后在画布中创建从该点到最后指定点的线条
-      console.log(e.touches[0].x, e.touches[0].y);
-      datax.push(e.touches[0].x);
-      datay.push(e.touches[0].y);
+      linex.push(e.touches[0].x.toFixed(2));
+      liney.push(e.touches[0].y.toFixed(2));
       ctx.stroke();  //对当前路径进行描边
     }
-    ctx.draw(true);
-    console.log(datax);
-    console.log(datay);
-    
+    ctx.draw(true); 
     that.pointData.begin_x = e.touches[0].x;
     that.pointData.begin_y = e.touches[0].y;
   },
   end: function (e) {
-   
+    datax.push(linex);
+    datay.push(liney);
+    linex = [];
+    liney = [];
+    console.log(datax);
+    console.log(datay);
   },
 
   //以下为自定义点击事件
