@@ -1,0 +1,8 @@
+<view class="page_view" >
+<image class="image_frame" src="{{imageUrl}}" mode="aspectFill"> 
+</image>
+
+<view class="setting_view_item" catchtap='goBack'>
+<image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>
+</view>
+</view>

@@ -1,0 +1,37 @@
+<import src="../template/template.wxml"/>
+<view class="page_view" >
+    <view class="canva_view">
+      <canvas canvas-id="myCanvas" bindtouchstart="start" disable-scroll="true"
+  bindtouchmove="move" bindtouchend="end" class='canvas'></canvas>
+   
+    </view>
+    <view class='canvas_setting_view'>
+      <template wx:if="{{showBgSet}}"  is="bgset" data="{{...canvasBgData}}"/>
+      <template wx:elif="{{showPenSet}}"  is="penset" data="{{...penData}}"/>
+      <view wx:else class="canvas_setting_view_index">
+          <view class="setting_view_item" catchtap='openBgSet'>
+              <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_bg.png"/>
+          </view>
+          <view class="setting_view_item_line" />
+          <view class="setting_view_item" catchtap='openPenSet'>
+              <image wx:if="{{isClear}}" class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_pen_no.png"/>
+              <image wx:else class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_pen.png"/>
+          </view>
+          <view class="setting_view_item_line" />
+          <view class="setting_view_item" catchtap='openErraserSet'>
+              <image wx:if="{{isClear}}" class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_eraser.png"/>
+              <image wx:else class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_eraser_no.png"/>
+          </view>
+         
+          <view class="setting_view_item_line" />
+          <view class="setting_view_item" catchtap='clearAll'>
+              <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>
+          </view>
+          <view class="setting_view_item_line" />
+          <view class="setting_view_item" catchtap='downLoadImage'>
+              <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_i.png"/>
+          </view>
+      </view>
+    </view>
+   
+</view>
