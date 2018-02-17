@@ -3,8 +3,6 @@
     <text class="user-motto">{{motto}}</text>  
     用户名：  
     <input type="text" bindinput="userNameInput"/> <!--binduserNameInput-->
-    密码：  
-    <input type="text" bindinput="userPasswordInput" password="true"/>  
     <button bindtap="logIn">登录</button>  
   </view>  
 </view>  
