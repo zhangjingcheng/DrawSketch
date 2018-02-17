@@ -256,20 +256,30 @@ Page({
     var that = this;
     //上传点坐标信息
     wx.request({
-      url: '',
+      url: 'http://118.89.161.135:8765/DrawSketch/finish',
       method: 'post',
       data: {
-        //这里是发送给服务器的参数（参数名：参数值） 
-        datax: datax,
-        datay: datay 
+        //这里是发送给服务器的参数（参数名：参数值）
+
+        "drawerid": "testid", 
+        "data_x": datax,
+        "data_y": datay,
+        "filename": "1161.png",
+        "displayx":1080,
+        "displayy":1920
+
       },
       header: {
-        'content-type': 'application/x-www-form-urlencoded'  //这里注意POST请求content-type是小写，大写会报错  
+        'content-type': 'application/json'  //这里注意POST请求content-type是小写，大写会报错  
       },
       success: function (res) {
         console.log(res.data)
       }
-    });  
+    });
+    //delete datax,datay
+    datax = [],
+    datay = [],
+      
     //接受一个新的图片url 并显示
     wx.redirectTo({
       url: '../show/show_image',

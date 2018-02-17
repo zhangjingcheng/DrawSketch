@@ -2,7 +2,10 @@
 <image class="image_frame" src="{{imageUrl}}" mode="aspectFill"> 
 </image>
 
-<view class="setting_view_item" catchtap='goBack'>
-<image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>
-</view>
+<!-- <view class="setting_view_item" catchtap='goBack'>
+<image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>-->
+<button type="default" size="{{defaultSize}}" loading="{{loading}}" plain="{{plain}}"
+        disabled="{{disabled}}" bindtap="countdown"
+        hover-class="other-button-hover" class="margin-button"> draw </button>
+
 </view>
