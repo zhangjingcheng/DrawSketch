@@ -15,10 +15,10 @@ import java.util.Map;
 public class DBUtils {
 
 	private static final String DRIVENAME = "com.mysql.jdbc.Driver";
-	private static final String URL = "jdbc:mysql://localhost:3306/draw3dsketch";
-	//private static final String URL = "jdbc:mysql://172.17.0.7:3306/draw3dsketch";
+	//private static final String URL = "jdbc:mysql://localhost:3306/draw3dsketch";
+	private static final String URL = "jdbc:mysql://172.17.0.7:3306/draw3dsketch";
 	private static final String USER = "root";
-	private static final String PASSWORD = "101235zh";
+	private static final String PASSWORD = "qianran1024";
 
 	private Connection conn = null;
 	private Statement st = null;

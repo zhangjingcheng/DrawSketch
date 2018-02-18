@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -51,7 +52,9 @@ public class SvgGenerator {
 	        Transformer transFormer = transFactory.newTransformer();  
 	        transFormer.setOutputProperty(OutputKeys.ENCODING, "GB2312");  
 	        DOMSource domSource = new DOMSource(document);  
-			Writer out = new OutputStreamWriter(new FileOutputStream(outputPath), "UTF-8");
+	        File file = new File(outputPath);
+	        file.createNewFile();
+			Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 			StreamResult result = new StreamResult(out);
 			transFormer.transform(domSource, result);  
 		}catch(Exception e) {

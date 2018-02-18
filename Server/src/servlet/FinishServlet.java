@@ -80,10 +80,15 @@ public class FinishServlet extends HttpServlet {
 					datax.add(linex);
 					datay.add(liney);
 				}
-				SvgGenerator.outputLines(datax, datay, "D:/" + filename.replace("png", "svg"));
-				//SvgGenerator.outputLines(datax, datay, "/root/finishSvg/" + filename.replace("png", "svg"));
-				if (db.update("update fileinfo set isfinished = 1 where filename = ?", new String[] { filename }) > 0){
-					json.put(KEY_RESULT, RESULT_SUCCESS);
+				//SvgGenerator.outputLines(datax, datay, "D:/" + filename.replace("png", "svg"));
+				if (SvgGenerator.outputLines(datax, datay,
+						this.getServletContext().getRealPath("/") + filename.replace("png", "svg")) == SvgGenerator.RESULT_OK) {
+					if (db.update("update fileinfo set isfinished = 1 where filename = ?",
+							new String[] { filename }) > 0) {
+						json.put(KEY_RESULT, RESULT_SUCCESS);
+					}
+				} else {
+					json.put(KEY_RESULT, RESULT_ERROR);
 				}
 			} else {
 				json.put(KEY_RESULT, RESULT_ERROR);
