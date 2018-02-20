@@ -200,6 +200,11 @@ Page({
     })
   },
 
+  checkImage: function (){
+    wx.redirectTo({ 
+      url: '../show/show_image',
+    })
+  },
   downLoadImage:function(){ 
     var that = this;
     //上传点坐标信息
@@ -232,10 +237,7 @@ Page({
     wx.redirectTo({
       url: '../show/show_image',
     })
-    wx.setStorage({
-      key: "imageUrl",
-      data: "https://model-1256072725.cos.ap-beijing.myqcloud.com/1161.png"
-    })
+
  }, 
  
  

@@ -11,6 +11,13 @@
       <view wx:else class="canvas_setting_view_index">
           <view class="setting_view_item_line" />
          
+
+          <view class="setting_view_item_line" />
+          <view class="setting_view_item" catchtap='checkImage'>
+              <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/bg_photo.png"/>
+          </view>
+
+         
           <view class="setting_view_item_line" />
           <view class="setting_view_item" catchtap='eraseLaststroke'>
               <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_eraser_no.png"/>

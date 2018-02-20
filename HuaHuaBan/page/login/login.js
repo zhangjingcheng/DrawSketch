@@ -39,14 +39,15 @@ Page({
     this.setData({
       userName: e.detail.value
     })
+    console.log(this.data.userName)
   },
 
   logIn: function () {
     var that = this
-    /*wx.request({
-      url: '',
+    wx.request({
+      url: 'https://78413126.draw3dsketch.com/login',
       data: {
-        username: this.data.userName,
+        drawerid: this.data.userName,
       },
       method: 'GET',
       success: function (res) {
@@ -55,18 +56,20 @@ Page({
           response: res
         })
         try {
-          wx.setStorageSync('id_token', res.data.id_token)
+          wx.setStorageSync('id_token', res.data.id_token)//同步存储
+          wx.setStorageSync('pic_url',res.data.resource_array)
         } catch (e) {
-        }*/
+        }
+
+        console.log(res.data);
         wx.navigateTo({
           url: '../index/index'
         })
-        console.log(res.data);
       },
       fail: function (res) {
         console.log(res.data);
         console.log('is failed')
       }
-   // })
-// }
+    })
+ }
 })  

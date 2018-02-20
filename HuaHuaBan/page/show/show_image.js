@@ -10,9 +10,10 @@ Page({
    * 页面的初始数据
    */
   data:{
+    pic_urls:'',
     imageUrl:'',
     disabled: true,
-    second:10 //下一张按钮在10s后才能生效
+    second:2 //下一张按钮在10s后才能生效
 
   },
   /**
@@ -51,17 +52,13 @@ Page({
   onUnload() {
 
   },
+  
 
   initImages(){
     var that = this;
-    wx.getStorage({
-    key: 'imageUrl',
-    success: function (res) {
-      console.log(res.data)
-      that.setData({ imageUrl: res.data })
-    }
-  })
-    
+    that.data.pic_urls = wx.getStorageSync('pic_url'); 
+    that.setData({ imageUrl: that.data.pic_urls[0] })
+    console.log(that.data.imageUrl)
   },
 
   goBack: function () {
