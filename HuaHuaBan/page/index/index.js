@@ -7,6 +7,7 @@ var datax = new Array();//total data
 var datay = new Array();
 var linex = new Array();//line data
 var liney = new Array();
+var start_end_time = new Array();// the start and end time for every stroke
 // 创建页面实例对象
 Page({
   /**
@@ -131,6 +132,7 @@ Page({
     ctx.lineTo(that.pointData.begin_x, that.pointData.begin_y);
     linex.push(that.pointData.begin_x.toFixed(2));
     liney.push(that.pointData.begin_y.toFixed(2));
+    start_end_time.push(Date.now())
     ctx.stroke();
     ctx.draw(true);
   },
@@ -149,10 +151,12 @@ Page({
   end: function (e) {
     datax.push(linex);
     datay.push(liney);
+    start_end_time.push(Date.now())
     linex = [];
     liney = [];
     console.log(datax);
     console.log(datay);
+    console.log(start_end_time)
   },
   
   eraseLaststroke: function (){
@@ -160,7 +164,6 @@ Page({
     ctx.draw();//清空
     that.resetColor();
     //重绘
-   
     ctx.setLineCap('round'); //设置线条端点的样式
     ctx.setLineJoin('round'); //设置两线相交处的样式
     ctx.save();  //保存当前坐标轴的缩放、旋转、平移信息
@@ -182,6 +185,8 @@ Page({
      ctx.draw(true);
      datax.pop();
      datay.pop();
+     start_end_time.pop();//delete the start time
+     start_end_time.pop();//delete the end time
     }
   },
 
@@ -195,6 +200,9 @@ Page({
           console.log('用户点击确定');
           ctx.draw();
           that.resetColor();
+          datax = [];
+          datay = [];
+          start_end_time = [];
         }   
       }
     })
@@ -220,7 +228,7 @@ Page({
     
     //上传点坐标信息
     wx.request({
-      url: 'https://78413126.draw3dsketch.com/finish111',
+      url: 'https://78413126.draw3dsketch.com/finish',
       method: 'post',
       data: {
         //这里是发送给服务器的参数（参数名：参数值）
@@ -228,6 +236,7 @@ Page({
         "drawerid": wx.getStorageSync('drawerid'), 
         "data_x": datax,
         "data_y": datay,
+        "start_end_time": start_end_time,
         "filename": wx.getStorageSync('filename'),
         "displayx":1080,
         "displayy":1920
