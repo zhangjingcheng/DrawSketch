@@ -3,11 +3,13 @@
 // 获取全局应用程序实例对象
 const app = getApp();
 var ctx = null;
+var time_start = 0;
 var datax = new Array();//total data
 var datay = new Array();
 var linex = new Array();//line data
 var liney = new Array();
-var start_end_time = new Array();// the start and end time for every stroke
+var time_line = new Array();//line time data
+var start_end_time = new Array();// the total start and end time for every stroke
 // 创建页面实例对象
 Page({
   /**
@@ -132,7 +134,8 @@ Page({
     ctx.lineTo(that.pointData.begin_x, that.pointData.begin_y);
     linex.push(that.pointData.begin_x.toFixed(2));
     liney.push(that.pointData.begin_y.toFixed(2));
-    start_end_time.push(Date.now())
+    time_start = Date.now();
+    time_line.push(0);
     ctx.stroke();
     ctx.draw(true);
   },
@@ -142,18 +145,21 @@ Page({
     ctx.lineTo(e.touches[0].x, e.touches[0].y);  //添加一个新点，然后在画布中创建从该点到最后指定点的线条
     linex.push(e.touches[0].x.toFixed(2));
     liney.push(e.touches[0].y.toFixed(2));
+    time_line.push(Date.now() - time_start);
     ctx.stroke();  //对当前路径进行描边
     
     ctx.draw(true); 
+    console.log(Date.now())
     that.pointData.begin_x = e.touches[0].x;
     that.pointData.begin_y = e.touches[0].y;
   },
   end: function (e) {
     datax.push(linex);
     datay.push(liney);
-    start_end_time.push(Date.now())
+    start_end_time.push(time_line)
     linex = [];
     liney = [];
+    time_line = [];
     console.log(datax);
     console.log(datay);
     console.log(start_end_time)
