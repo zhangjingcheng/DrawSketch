@@ -242,7 +242,7 @@ Page({
         "drawerid": wx.getStorageSync('drawerid'), 
         "data_x": datax,
         "data_y": datay,
-        "start_end_time": start_end_time,
+        "diff_time": start_end_time,
         "filename": wx.getStorageSync('filename'),
         "displayx":1080,
         "displayy":1920
