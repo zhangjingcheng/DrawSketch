@@ -134,11 +134,17 @@ Page({
     ctx.lineTo(that.pointData.begin_x, that.pointData.begin_y);
     linex.push(that.pointData.begin_x.toFixed(2));
     liney.push(that.pointData.begin_y.toFixed(2));
+    if(time_start == 0){
+      time_line.push(0);
+      }
+    else{
+      time_line.push(Date.now()-time_start);
+      }
     time_start = Date.now();
-    time_line.push(0);
     ctx.stroke();
     ctx.draw(true);
   },
+
   move: function (e) {
     var that = this;
     ctx.moveTo(that.pointData.begin_x, that.pointData.begin_y);  //把路径移动到画布中的指定点，但不创建线条
@@ -146,13 +152,13 @@ Page({
     linex.push(e.touches[0].x.toFixed(2));
     liney.push(e.touches[0].y.toFixed(2));
     time_line.push(Date.now() - time_start);
-    ctx.stroke();  //对当前路径进行描边
-    
+    time_start = Date.now();
+    ctx.stroke();  //对当前路径进行描边 
     ctx.draw(true); 
-    console.log(Date.now())
     that.pointData.begin_x = e.touches[0].x;
     that.pointData.begin_y = e.touches[0].y;
   },
+
   end: function (e) {
     datax.push(linex);
     datay.push(liney);
@@ -160,9 +166,6 @@ Page({
     linex = [];
     liney = [];
     time_line = [];
-    console.log(datax);
-    console.log(datay);
-    console.log(start_end_time)
   },
   
   eraseLaststroke: function (){
@@ -221,16 +224,7 @@ Page({
     })
   },
   downLoadImage:function(){ 
-    var rest_url = wx.getStorageSync('pic_url')
-    rest_url.pop()
-    wx.setStorageSync('pic_url', rest_url)
-    wx.setStorageSync('un_count', wx.getStorageSync('un_count') - 1)
-    wx.setStorageSync('method', 1)
-    wx.navigateTo({
-      url: '../show/show_image',
-    })
-    console.log(rest_url.pop())
-    //接受一个新的图片url 并显示
+
     
     //上传点坐标信息
     wx.request({
@@ -244,8 +238,8 @@ Page({
         "data_y": datay,
         "diff_time": start_end_time,
         "filename": wx.getStorageSync('filename'),
-        "displayx":1080,
-        "displayy":1920
+        "displayx": wx.getStorageSync('displayx'),
+        "displayy": wx.getStorageSync('displayy')
 
       },
       header: {
@@ -255,13 +249,13 @@ Page({
         console.log(res.data)
         if(res.data.result == 1) {
           var rest_url = wx.getStorageSync('pic_url')
-          rest.pop()
           wx.setStorageSync('pic_url', rest_url)
           wx.setStorageSync('un_count', wx.getStorageSync('un_count') - 1)
           wx.setStorageSync('method', 1)
           //delete datax,datay
           datax = []
           datay = []
+          start_end_time = []
           wx.navigateTo({
             url: '../show/show_image',
           })

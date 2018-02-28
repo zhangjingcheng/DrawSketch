@@ -1,5 +1,5 @@
 <view class="container">
-<image class="show-img" src="{{imageUrl}}" mode="aspectFill"> </image>
+<image class="show-img" src="{{imageUrl}}" mode="widthFix"> </image>
 <view class="line"></view> 
 
   <!-- <view class="setting_view_item" catchtap='goBack'>

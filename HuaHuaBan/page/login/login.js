@@ -61,18 +61,63 @@ Page({
           wx.setStorageSync('pic_url', res.data.resource_array)
           wx.setStorageSync('un_count', res.data.unfinished_count)
           wx.setStorageSync('method', 1)
+          console.log(res.data);
         } catch (e) {
           console.log(e)
         }
 
         console.log(wx.getStorageSync('pic_url'));
-        wx.navigateTo({
-          url: '../show/show_image'
-        })
+        if (res.data.result == 1){
+
+          wx.showModal({
+            title: '提示',
+            content: '剩余' + res.data.unfinished_count + '张',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+                wx.navigateTo({
+                  url: '../show/show_image'
+                })
+              }
+            }
+          })
+          wx.getSystemInfo({
+            success: function (res) {         
+              wx.setStorageSync('displayx', res.windowHeight),
+              wx.setStorageSync('displayy', res.windowWidth)  
+              console.log(res.windowHeight)
+              console.log(res.windowWidth)          
+            }
+          });  
+         
+
+     }
+
+        if (res.data.result == -1) {
+          wx.showModal({
+            title: '提示',
+            content: '用户名错误',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+              }
+            }
+          })
+        }
+      
       },
       fail: function (res) {
         console.log(res.data);
-        console.log('is failed')
+        console.log('is failed');
+        wx.showModal({
+          title: '提示',
+          content: '未连接到服务器',
+          success: function (res) {
+            if (res.confirm) {
+              console.log('用户点击确定');
+            }
+          }
+        })
       }
     })
  }
