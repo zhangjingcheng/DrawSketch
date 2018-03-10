@@ -238,8 +238,10 @@ Page({
         "data_y": datay,
         "diff_time": start_end_time,
         "filename": wx.getStorageSync('filename'),
+       // "resx": wx.getStorageSync('resx'),
+       // "resy": wx.getStorageSync('resy'),
         "displayx": wx.getStorageSync('displayx'),
-        "displayy": wx.getStorageSync('displayy')
+        "displayy": wx.getStorageSync('displayy'),
 
       },
       header: {
