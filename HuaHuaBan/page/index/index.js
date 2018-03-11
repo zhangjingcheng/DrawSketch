@@ -180,7 +180,7 @@ Page({
     var stroke_num = datax.length;
     if (stroke_num > 0){
       
-     ctx.setLineWidth(that.data.penData.penSize);
+     
      for (var j = 0; j < stroke_num-1; j++)
      {
        var last_line_x = datax[j];
@@ -188,6 +188,7 @@ Page({
        for (var i = 0; i < last_line_x.length-1; i++){
         ctx.moveTo(last_line_x[i], last_line_y[i]);
         ctx.lineTo(last_line_x[i+1], last_line_y[i+1]);
+        ctx.setLineWidth(that.data.penData.penSize);
         ctx.stroke(); } //对当前路径进行描边    
       }
      ctx.restore()  //恢复之前保存过的坐标轴的缩放、旋转、平移信息
@@ -195,7 +196,7 @@ Page({
      datax.pop();
      datay.pop();
      start_end_time.pop();//delete the start time
-     start_end_time.pop();//delete the end time
+    
     }
   },
 
@@ -262,6 +263,19 @@ Page({
           wx.navigateTo({
             url: '../show/show_image',
           })
+        }
+        if (res.data.result != 1){
+
+          wx.showModal({
+            title: '提示',
+            content: '服务器状态错误，请联系管理员',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+              }
+            }
+          });  
+
         }
       }
     });
