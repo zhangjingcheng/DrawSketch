@@ -268,7 +268,7 @@ Page({
 
           wx.showModal({
             title: '提示',
-            content: '服务器状态错误，请联系管理员',
+            content: '服务器状态错误，请联系管理员, ERROR CODE: ' + res.data.result,
             success: function (res) {
               if (res.confirm) {
                 console.log('用户点击确定');
