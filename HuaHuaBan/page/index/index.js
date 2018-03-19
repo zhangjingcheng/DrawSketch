@@ -21,18 +21,18 @@ Page({
    */
 
   data: {
-    
+
     showBgSet: false,
-    showPenSet:false, 
+    showPenSet: false,
     defaultBgColor: '#e3e3e3',
     defaultPenColor: '#000000',
-    
+
     //画布背景颜色数据
-    canvasBgData:{
+    canvasBgData: {
       canvasBgColor: "#e3e3e3",
     },
     //画笔数据
-    
+
     penData: {
       penSize: 1,
       color: '#000000',
@@ -42,20 +42,23 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad () {
+  onLoad() {
     this.initCanvas();
+    datax = [];
+    datay = [];
+    start_end_time = [];
   },
 
   /**
    * 加载画布
    */
-  initCanvas(){
+  initCanvas() {
     ctx = wx.createCanvasContext('myCanvas')
     ctx.setLineCap('round')
     ctx.setLineJoin('round')
   },
 
-  resetColor(){
+  resetColor() {
     var bg = this.data.canvasBgData;
     bg.canvasBgColor = this.data.defaultBgColor;
     var pen = this.data.penData;
@@ -68,53 +71,53 @@ Page({
       canvasBgData: bg,
       penData: pen
     })
-    
+
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady () {
+  onReady() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow () {
+  onShow() {
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide () {
+  onHide() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload () {
+  onUnload() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh () {
-    
+  onPullDownRefresh() {
+
   },
-  
+
   //画图事件
 
-  pointData:{
-    begin_x:0,
-    begin_y:0,
-    end_x:null,
-    end_y:null,
+  pointData: {
+    begin_x: 0,
+    begin_y: 0,
+    end_x: null,
+    end_y: null,
   },
-  
- 
+
+
 
   start: function (e) {
     var that = this;
@@ -134,12 +137,12 @@ Page({
     ctx.lineTo(that.pointData.begin_x, that.pointData.begin_y);
     linex.push(that.pointData.begin_x.toFixed(2));
     liney.push(that.pointData.begin_y.toFixed(2));
-    if(time_start == 0){
+    if (time_start == 0) {
       time_line.push(0);
-      }
-    else{
-      time_line.push(Date.now()-time_start);
-      }
+    }
+    else {
+      time_line.push(Date.now() - time_start);
+    }
     time_start = Date.now();
     ctx.stroke();
     ctx.draw(true);
@@ -154,7 +157,7 @@ Page({
     time_line.push(Date.now() - time_start);
     time_start = Date.now();
     ctx.stroke();  //对当前路径进行描边 
-    ctx.draw(true); 
+    ctx.draw(true);
     that.pointData.begin_x = e.touches[0].x;
     that.pointData.begin_y = e.touches[0].y;
   },
@@ -167,36 +170,24 @@ Page({
     liney = [];
     time_line = [];
   },
-  
-  eraseLaststroke: function (){
-    var that = this;
-    ctx.draw();//清空
-    that.resetColor();
-    //重绘
-    ctx.setLineCap('round'); //设置线条端点的样式
-    ctx.setLineJoin('round'); //设置两线相交处的样式
-    ctx.save();  //保存当前坐标轴的缩放、旋转、平移信息
-    ctx.beginPath(); //开始一个路径
-    var stroke_num = datax.length;
-    if (stroke_num > 0){
-      
-     
-     for (var j = 0; j < stroke_num-1; j++)
-     {
-       var last_line_x = datax[j];
-       var last_line_y = datay[j];
-       for (var i = 0; i < last_line_x.length-1; i++){
-        ctx.moveTo(last_line_x[i], last_line_y[i]);
-        ctx.lineTo(last_line_x[i+1], last_line_y[i+1]);
-        ctx.setLineWidth(that.data.penData.penSize);
-        ctx.stroke(); } //对当前路径进行描边    
+
+  eraseLaststroke: function () {
+    ctx.draw();
+    if (datax.length > 0) {
+      for (var j = 0; j < datax.length - 1; j++) {
+        var last_line_x = datax[j];
+        var last_line_y = datay[j];
+        for (var i = 0; i < last_line_x.length - 1; i++) {
+          ctx.moveTo(last_line_x[i], last_line_y[i]);
+          ctx.lineTo(last_line_x[i + 1], last_line_y[i + 1]);
+          ctx.stroke();
+        } //对当前路径进行描边    
       }
-     ctx.restore()  //恢复之前保存过的坐标轴的缩放、旋转、平移信息
-     ctx.draw(true);
-     datax.pop();
-     datay.pop();
-     start_end_time.pop();//delete the start time
-    
+      
+      ctx.draw(true);
+      datax.pop();
+      datay.pop();
+      start_end_time.pop();//delete the start time
     }
   },
 
@@ -204,7 +195,7 @@ Page({
     var that = this;
     wx.showModal({
       title: '提示',
-      content: '确认清除画板所有内容', 
+      content: '确认清除画板所有内容',
       success: function (res) {
         if (res.confirm) {
           console.log('用户点击确定');
@@ -213,34 +204,47 @@ Page({
           datax = [];
           datay = [];
           start_end_time = [];
-        }   
+        }
       }
     })
   },
 
-  checkImage: function (){
+  checkImage: function () {
     wx.setStorageSync('method', 0)
-    wx.redirectTo({ 
+    wx.redirectTo({
       url: '../show/show_image',
     })
   },
-  downLoadImage:function(){ 
-
-    
+  upload: function () {
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '确定已完成绘制并上传？',
+      success: function (res) {
+        if (res.confirm) {
+          that.downLoadImage();
+        }
+      }
+    });
+  },
+  downLoadImage: function () {
+    console.log(datax);
+    console.log(datay);
+    console.log(start_end_time);
     //上传点坐标信息
     wx.request({
-      url: 'https://wxapi.hotapp.cn/proxy/?appkey=hotapp403228604&url=https://78413126.draw3dsketch.com/finish',
+      url: 'https://78413126.draw3dsketch.com/finish',
       method: 'post',
       data: {
         //这里是发送给服务器的参数（参数名：参数值）
 
-        "drawerid": wx.getStorageSync('drawerid'), 
+        "drawerid": wx.getStorageSync('drawerid'),
         "data_x": datax,
         "data_y": datay,
         "diff_time": start_end_time,
         "filename": wx.getStorageSync('filename'),
-       // "resx": wx.getStorageSync('resx'),
-       // "resy": wx.getStorageSync('resy'),
+        // "resx": wx.getStorageSync('resx'),
+        // "resy": wx.getStorageSync('resy'),
         "displayx": wx.getStorageSync('displayx'),
         "displayy": wx.getStorageSync('displayy'),
         "device": wx.getStorageSync('device'),
@@ -251,7 +255,7 @@ Page({
       },
       success: function (res) {
         console.log(res.data)
-        if(res.data.result == 1) {
+        if (res.data.result == 1) {
           var rest_url = wx.getStorageSync('pic_url')
           wx.setStorageSync('pic_url', rest_url)
           wx.setStorageSync('un_count', wx.getStorageSync('un_count') - 1)
@@ -260,11 +264,11 @@ Page({
           datax = []
           datay = []
           start_end_time = []
-          wx.navigateTo({
+          wx.redirectTo({
             url: '../show/show_image',
           })
         }
-        if (res.data.result != 1){
+        if (res.data.result != 1) {
 
           wx.showModal({
             title: '提示',
@@ -274,13 +278,13 @@ Page({
                 console.log('用户点击确定');
               }
             }
-          });  
+          });
 
         }
       }
     });
- },
- 
- 
+  },
+
+
 })
 

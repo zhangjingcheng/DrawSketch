@@ -28,7 +28,7 @@
               <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_clear.png"/>
           </view>
           <view class="setting_view_item_line" />
-          <view class="setting_view_item" catchtap='downLoadImage'>
+          <view class="setting_view_item" catchtap='upload'>
               <image class="setting_image_icon"  mode="scaleToFill" src="../../resources/icon/btn_i.png"/>
           </view>
       </view>

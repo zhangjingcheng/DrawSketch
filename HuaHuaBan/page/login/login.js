@@ -47,13 +47,12 @@ Page({
     this.setData({
       userName: e.detail.value
     })
-    console.log(this.data.userName)
   },
 
   logIn: function () {
     var that = this
     wx.request({
-      url: 'https://wxapi.hotapp.cn/proxy/?appkey=hotapp403228604&url=https://78413126.draw3dsketch.com/login',
+      url: 'https://78413126.draw3dsketch.com/login',
       data: {
         drawerid: this.data.userName,
       },
@@ -83,7 +82,7 @@ Page({
             success: function (res) {
               if (res.confirm) {
                 console.log('用户点击确定');
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '../show/show_image'
                 })
               }
